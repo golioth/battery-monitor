@@ -40,7 +40,7 @@ char *get_batt_v_str(void);
  *
  * @return Pointer to character array
  */
-char *get_batt_lvl_str(void);
+char *get_batt_pct_str(void);
 
 /**
  * @brief Read the battery voltage and estimated level.

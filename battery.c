@@ -23,14 +23,14 @@
 LOG_MODULE_REGISTER(battery, CONFIG_BATTERY_MONITOR_LOG_LEVEL);
 
 /* Formatting string for sending battery JSON to Golioth */
-#define JSON_FMT "{\"batt_v\":%d.%03d,\"batt_lvl\":%d.%02d}"
+#define JSON_FMT "{\"batt_v\":%d.%03d,\"batt_pct\":%d.%02d}"
 
 #define LABEL_BATTERY "Battery"
 
 char stream_endpoint[] = "battery";
 
 char _batt_v_str[8] = "0.0 V";
-char _batt_lvl_str[5] = "none";
+char _batt_pct_str[5] = "none";
 
 static int battery_setup(void)
 {
@@ -57,14 +57,14 @@ char *get_batt_v_str(void)
 	return _batt_v_str;
 }
 
-char *get_batt_lvl_str(void)
+char *get_batt_pct_str(void)
 {
-	return _batt_lvl_str;
+	return _batt_pct_str;
 }
 
 void log_battery_data(void)
 {
-	LOG_INF("Battery measurement: voltage=%s, level=%s", get_batt_v_str(), get_batt_lvl_str());
+	LOG_INF("Battery measurement: voltage=%s, percent=%s", get_batt_v_str(), get_batt_pct_str());
 }
 
 static void async_error_handler(struct golioth_client *client, enum golioth_status status,
@@ -80,7 +80,7 @@ static void async_error_handler(struct golioth_client *client, enum golioth_stat
 int stream_battery_data(struct golioth_client *client, struct battery_data *batt_data)
 {
 	int err;
-	/* {"batt_v":X.XXX,"batt_lvl":XXX.XX} */
+	/* {"batt_v":X.XXX,"batt_pct":XXX.XX} */
 	char json_buf[35];
 
 	/* Send battery data to Golioth */
@@ -112,7 +112,7 @@ int read_and_report_battery(struct golioth_client *client)
 	/* Format as global string for easy access */
 	snprintk(_batt_v_str, sizeof(_batt_v_str), "%d.%03d V", batt_data.battery_voltage_mv / 1000,
 		 batt_data.battery_voltage_mv % 1000);
-	snprintk(_batt_lvl_str, sizeof(_batt_lvl_str), "%d%%", batt_data.battery_level_pptt / 100);
+	snprintk(_batt_pct_str, sizeof(_batt_pct_str), "%d%%", batt_data.battery_level_pptt / 100);
 
 	log_battery_data();
 
