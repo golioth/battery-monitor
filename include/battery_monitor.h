@@ -10,7 +10,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <golioth/client.h>
 
 /** A battery voltage and level measurement.
  *
@@ -59,6 +58,9 @@ int read_battery_data(struct battery_data *batt_data);
  */
 void log_battery_data(void);
 
+#ifdef CONFIG_GOLIOTH_FIRMWARE_SDK
+#include <golioth/client.h>
+
 /**
  * @brief Stream battery data to Golioth.
  *
@@ -78,4 +80,5 @@ int stream_battery_data(struct golioth_client *client, struct battery_data *batt
  */
 int read_and_report_battery(struct golioth_client *client);
 
+#endif /* CONFIG_GOLIOTH_FIRMWARE_SDK */
 #endif /* APPLICATION_BATTERY_H_ */

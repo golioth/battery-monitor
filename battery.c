@@ -15,8 +15,6 @@
 #include <zephyr/kernel.h>
 #include <zephyr/init.h>
 #include <zephyr/logging/log.h>
-#include <golioth/client.h>
-#include <golioth/stream.h>
 
 #include "battery_measurement_api.h"
 
@@ -66,6 +64,11 @@ void log_battery_data(void)
 {
 	LOG_INF("Battery measurement: voltage=%s, percent=%s", get_batt_v_str(), get_batt_pct_str());
 }
+
+#ifdef CONFIG_GOLIOTH_FIRMWARE_SDK
+
+#include <golioth/client.h>
+#include <golioth/stream.h>
 
 static void async_error_handler(struct golioth_client *client, enum golioth_status status,
 				const struct golioth_coap_rsp_code *coap_rsp_code, const char *path,
@@ -128,3 +131,5 @@ int read_and_report_battery(struct golioth_client *client)
 
 	return 0;
 }
+
+#endif /* CONFIG_GOLIOTH_FIRMWARE_SDK */
