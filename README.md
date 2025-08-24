@@ -14,9 +14,9 @@ the devicetree. Otherwise, it will use a voltage divider based on the
 Add this block to `west.yml` and run `west update`:
 
 ```
-    - name: Golioth Battery Monitor
+    - name: golioth-battery-monitor
       path: deps/modules/lib/battery-monitor
-      revision: v1.0.0
+      revision: v1.2.0
       url: https://github.com/golioth/battery-monitor
 ```
 
